@@ -1,1 +1,1 @@
-"# SAT-word-game" 
+# SAT-word-game
