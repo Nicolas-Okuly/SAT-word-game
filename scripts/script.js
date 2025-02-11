@@ -56,7 +56,7 @@ async function failedToLoad() {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/word_list.json")).json();
+        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
     }
