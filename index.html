@@ -5,9 +5,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>SAT Word Game</title>
 
-        <script src="script.js"></script>
+        <link rel="stylesheet" href="styles.css">
+
+        <script src="./scripts/script.js" defer></script>
+        <script src="./scripts/utils.js" defer></script>
     </head>
     <body>
-        
+        <h1>SAT Word Game</h1>
+        <h2>Current Gamemode: <span id="gamemode"></span></h2>
+        <div class="game-body">
+            
+            <div id="notification">
+                <h3 id="notif-title">Notification</h3>
+                <h4 id="notif-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quidem modi iste quam illo totam optio vel ex perspiciatis magni?</h4>
+            </div>
+
+            <h2 id="timer">Time: <span id="time">0</span>s</h2>
+            <div id="game-element">
+                <p id="description"></p>
+                <p id="challenge"></p>
+                <div id="scrambled"></div>
+                <form id="inputBoxes">
+
+                </form>
+            </div>
+        </div>
+
+        <div id="modal">
+            
+        </div>
     </body>
 </html>

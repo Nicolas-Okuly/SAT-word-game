@@ -1,5 +1,5 @@
-{
-    "a": [
+[
+    {"a": [
         { "n": "abate", "d": "To reduce in intensity; to lessen" },
         { "n": "abet", "d": "To support or encourage" },
         { "n": "abhor", "d": "To hate something" },
@@ -11,15 +11,15 @@
         { "n": "analogy", "d": "A comparison of two otherwise unalike things based on resemblance of a particular aspect; widely used in literature" },
         { "n": "apprehend", "d": "To arrest someone recognize the meaning of an idea or a thing" },
         { "n": "articulate", "d": "To explain something clearly" }
-    ],
-    "b": [
+    ]},
+    {"b": [
         { "n": "bane", "d": "Something capable of causing destruction or ruin" },
         { "n": "bereft", "d": "Lacking something needed, wanted, or expected; a person grieving the death of a loved one" },
         { "n": "bias", "d": "To possess an inclined outlook towards an object or an idea" },
         { "n": "berate", "d": "To scold someone strongly" },
         { "n": "brevity", "d": "SoI mething or event that is short in length or duration" }
-    ],
-    "c": [
+    ]},
+    {"c": [
         { "n": "cache", "d": "A secure place that is used to store objects secretly" },
         { "n": "capitalize", "d": "To profit from a resource or an opportunity" },
         { "n": "capitulate", "d": "To surrender on terms agreed upon in advance" },
@@ -29,8 +29,8 @@
         { "n": "construe", "d": "To construct or interpret meaning out of a sentence or words" },
         { "n": "contentious", "d": "Inclined towards argument or dispute" },
         { "n": "covet", "d": "Want or desire" }
-    ],
-    "d": [
+    ]},
+    {"d": [
         { "n": "dearth", "d": "Lack or absence of something" },
         { "n": "debunk", "d": "To expose the falseness of a fact" },
         { "n": "defunct", "d": "Extinct or no longer functioning" },
@@ -39,8 +39,8 @@
         { "n": "dispel", "d": "To drive away something (can also be a belief system or a myth)" },
         { "n": "doctrine", "d": "Principles or rules that create a belief system" },
         { "n": "dogma", "d": "Something considered an established opinion (can be a belief or a set of moral codes)" }
-    ],
-    "e": [
+    ]},
+    {"e": [
         { "n": "eclectic", "d": "Composed of elements drawn from various sources; can be used to refer to a person who pursues an eclectic method or approach" },
         { "n": "embezzle", "d": "To take something (usually money or property) dishonestly for one's own use" },
         { "n": "elicit", "d": "To draw out an answer or explanation often by skillful questioning or discussion" },
@@ -51,50 +51,50 @@
         { "n": "expedite", "d": "To speed up the process or progress of an event" },
         { "n": "extraneous", "d": "Alien; something that exists or comes from outside" },
         { "n": "equivocal", "d": "Something that is unclear or uncertain in its meaning" }
-    ],
-    "f": [
+    ]},
+    {"f": [
         { "n": "foil", "d": "A very thin sheet of metal; something or someone that serves as a contrast to another" },
         { "n": "fallacy", "d": "A false or mistaken idea" },
         { "n": "fortuitous", "d": "Fortunate or lucky" },
         { "n": "flagrant", "d": "So bad as to be impossible to overlook" }
-    ],
-    "g": [
+    ]},
+    {"g": [
         { "n": "grandiloquent", "d": "A lofty, extravagant, or bombastic style, especially used in literature" },
         { "n": "gratuitous", "d": "Something that is required by the circumstance but done or provided freely" }
-    ],
-    "h": [
+    ]},
+    {"h": [
         { "n": "hapless", "d": "Unfortunate" },
         { "n": "hegemony", "d": "The social, cultural, ideological, or economic influence exerted by a dominant group" },
         { "n": "heterogeneous", "d": "Something originating from an outside source; something consisting of different elements from various sources" },
         { "n": "hubris", "d": "A heightened sense of self-pride or overconfidence" }
-    ],
-    "i": [
+    ]},
+    {"i": [
         { "n": "idiosyncrasy", "d": "A way of behaving or thinking that is characteristic of a person" },
         { "n": "impetuous", "d": "Impulsive" },
         { "n": "impute", "d": "To blame someone unjustly" },
         { "n": "incumbent", "d": "Someone who occupies a particular position or place" },
         { "n": "incite", "d": "To move to action; to make something happen" },
         { "n": "insurgent", "d": "Someone who revolts against civil authority or an established government; a rebel" }
-    ],
-    "l": [
+    ]},
+    {"l": [
         { "n": "licentious", "d": "Someone who disregards moral, ethical or legal restraints" },
         { "n": "linchpin", "d": "Someone or something that holds together multiple pieces or people together" },
         { "n": "litigate", "d": "To decide and settle in a court of law" }
-    ],
-    "m": [
+    ]},
+    {"m": [
         { "n": "maxim", "d": "Universal truth, fundamental principle, or rule of conduct, or proverb" },
         { "n": "multifarious", "d": "Something or an event that has multiple variety" }
-    ],
-    "n": [
+    ]},
+    {"n": [
         { "n": "nadir", "d": "The lowest point of something" },
         { "n": "noxious", "d": "Something that is harmful or destructive" }
-    ],
-    "o": [
+    ]},
+    {"o": [
         { "n": "opine", "d": "To put forth one's point-of-view about something" },
         { "n": "ostensible", "d": "To demonstrate or exhibit" },
         { "n": "ostracism", "d": "The state of being outcasted ot barred from a community or group" }
-    ],
-    "p": [
+    ]},
+    {"p": [
         { "n": "paradigm", "d": "An example showing how something is to be done; a model" },
         { "n": "partisan", "d": "A person who is strongly devoted to a particular cause or group" },
         { "n": "pejorative", "d": "A word or phrase that has negative connotations" },
@@ -103,42 +103,42 @@
         { "n": "prerogative", "d": "An exclusive or special right, power, or privilege" },
         { "n": "prompt", "d": "Something that asks someone to do or operate; being ready and quick to act" },
         { "n": "prosecute", "d": "To carry on a legal action against an accused person to prove his or her guilt; to follow up to the end" }
-    ],
-    "q": [
+    ]},
+    {"q": [
         { "n": "quaint", "d": "Something marked by beauty, skillful design or being strikingly old-fashioned" },
         { "n": "quixotic", "d": "Impractical especially in the foolish pursuit of ideals" }
-    ],
-    "r": [
+    ]},
+    {"r": [
         { "n": "refute", "d": "To deny or disregard" },
         { "n": "relegate", "d": "To banish or send into exile; to carry out a decision" },
         { "n": "requisition", "d": "To require or demand something, especially by an authority" }
-    ],
-    "s": [
+    ]},
+    {"s": [
         { "n": "sanctity", "d": "The quality of being holy or sacred" },
         { "n": "sanctuary", "d": "A safe or a sacred place" },
-        { "n": "sanguine", "d": "To be sure and certain of something; something that has the color of blood" },
+        { "n": "sanguine", "d": "optimistic or positive, especially in an apparently bad or difficult situation; something that has the color of blood" },
         { "n": "serendipity", "d": "The gift of finding valuable things not looked for" },
         { "n": "solicit", "d": "To approach with a request or plea, to make a petition to, especially a judicial body" },
         { "n": "spur", "d": "Impulsive; to move to action" },
         { "n": "surreptitious", "d": "Done, made, or acquired by stealth and secrecy" }
-    ],
-    "t": [
+    ]},
+    {"t": [
         { "n": "tirade", "d": "A long violent angry speech" },
         { "n": "torpid", "d": "Someone lacking in energy or enthusiasm" },
         { "n": "torrent", "d": "A violent or forceful flow of wind or water" },
         { "n": "travesty", "d": "An inferior imitation of something" }
-    ],
-    "u": [
+    ]},
+    {"u": [
         { "n": "ubiquitous", "d": "Existing or being everywhere at the same time" },
         { "n": "undermine", "d": "To weaken or ruin secretly or gradually" },
         { "n": "utilitarian", "d": "Someone who believes that the value of something lies in its usefulness" }
-    ],
-    "v": [
+    ]},
+    {"v": [
         { "n": "veracity", "d": "Being true" },
         { "n": "vestige", "d": "A trace or mark left by something" },
         { "n": "vilify", "d": "To utter slanderous and abusive statements against" }
-    ],
-    "w": [
+    ]},
+    {"w": [
         { "n": "warrant", "d": "To give proof of the authenticity or truth of something" }
-    ]
-}
+    ]}
+]

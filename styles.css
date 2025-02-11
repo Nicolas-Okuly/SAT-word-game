@@ -1,0 +1,29 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.word-input, .word-list {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+  margin: 2px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#notification {
+  background-color: rgba(238, 238, 238, 0.75);
+  border-left: solid 5px #0067ff;
+  padding: 5px;
+  padding-left: 10px;
+  display: none;
+  border-radius: 0 15px 15px 0;
+  max-width: 500px;
+}
+#notification:hover {
+  background-color: rgba(204, 204, 204, 0.75);
+}
+#notification #notif-title {
+  text-align: center;
+}
