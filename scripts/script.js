@@ -85,8 +85,7 @@ function formatWordsToJSON(data) {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("https://docs.google.com/spreadsheets/d/1mZesmqDZtKJoYmVzY5X6ql3a-s0AxccFkfGGlNJ5X6U/export?format=csv")).text();
-        wordlist = formatWordsToJSON(wordlist);
+        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
         throw new Error(e)
