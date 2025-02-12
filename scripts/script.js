@@ -1,6 +1,7 @@
 let gameObject = {
     "timed": true, // Whether or not it is timed
     "score": 0, // Current score
+    "timeItr": 0,
     "time": 0, // Time in seconds
     "wordlist": Array(), // List of words in the game
     "currentWord": {
@@ -47,15 +48,48 @@ async function failedToLoad() {
     `;
 }
 
+function formatWordsToJSON(data) {
+    const result = {};
+
+    data = data.split("\n");
+    let newArr = [];
+
+    data.forEach((row) => {
+        let usableData = row
+        .match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g)
+        .map(value => value.replace(/^"|"$/g, ''));
+
+        newArr.push(usableData);
+    });
+
+    newArr.forEach((set) => {
+        let word = set[0];
+        let definition = set[1];
+        let firstLetter = word.toLowerCase();
+        if (!result[firstLetter]) {
+            result[firstLetter] = []; 
+        }
+        result[firstLetter].push({ n: word, d: definition }); 
+    });
+
+    const finalJSON = Object.keys(result)
+        .sort()
+        .map(letter => ({ [letter]: result[letter] }))
+
+    return finalJSON;
+}
+
 /**
  * Function to load the word list.
  */
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
+        wordlist = await (await fetch("https://docs.google.com/spreadsheets/d/1mZesmqDZtKJoYmVzY5X6ql3a-s0AxccFkfGGlNJ5X6U/export?format=csv")).text();
+        wordlist = formatWordsToJSON(wordlist);
     } catch (e) {
         await failedToLoad();
+        throw new Error(e)
     }
 
     gameObject.wordlist = wordlist;
@@ -84,6 +118,13 @@ function handleTime() {
         return "Timer Disabled";
     }
     gameObject.time += 1;
+    
+    if (Math.floor(gameObject.time/30) != gameObject.timeItr) {
+        gameObject.timeItr += 1;
+        gameObject.score -= 1;
+        sendAlert("You recieved a one point deduction.", "Time Penalty");
+    } 
+
     htmlObjects.time.innerHTML = gameObject.time;
 }
 
@@ -116,7 +157,7 @@ async function insertInput() {
     htmlObjects.inputBoxes.innerHTML += `<br><br><div id="game-buttons">
     <button type="submit">Check Answer</button> 
     <button onclick="reshuffle()" type="button">Reshuffle</button>
-    <button onclick="sendHint()" type="button">Give me a hint</button>
+    <button onclick="sendHint()" type="button">Definition</button>
     <button type="button" onclick="giveUp()">Give Up</button>
     </div>`;
 }
@@ -177,6 +218,7 @@ function sendHint() {
 function resetGame() {
     gameObject.time = 0;
     gameObject.currentWord = {};
+    gameObject.timeItr = 0;
     clearInterval(gameObject.interval)
     htmlObjects.inputBoxes.innerHTML = "";
     htmlObjects.modal.style.display = "none";
