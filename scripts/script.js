@@ -1,6 +1,4 @@
 let gameObject = {
-    "types": ["Definition", "Scramble"], // Types of gamemodes
-    "gamemode": 0, // Array index for gamemode being used
     "timed": true, // Whether or not it is timed
     "score": 0, // Current score
     "time": 0, // Time in seconds
@@ -18,11 +16,10 @@ const htmlObjects = {
     "gamemode": document.getElementById("gamemode"),
     "time": document.getElementById("time"),
     "timer": document.getElementById("timer"),
-    "description": document.getElementById("description"),
-    "challenge": document.getElementById("challenge"),
     "inputBoxes": document.getElementById("inputBoxes"),
     "scrambled": document.getElementById("scrambled"),
-    "modal": document.getElementById("modal")
+    "modal": document.getElementById("modal"),
+    "gameBody": document.getElementsByClassName("game-body")[0]
 }
 
 /**
@@ -56,7 +53,7 @@ async function failedToLoad() {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
+        wordlist = await (await fetch("/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
     }
@@ -94,31 +91,12 @@ function handleTime() {
  * Adjust the view.
  */
 async function adjustGameBox() {
-    var description = "";
-    var challenge = "";
-    switch (gameObject.gamemode) {
-        case 0:
-            description = "Use the provided definition to guess what the word is.";
-            challenge = gameObject.currentWord.definition;
-            break;
-        case 1:
-            description = "Use the provided letters to unscramble the word.";
-            let word = gameObject.currentWord.normal;
-            for (let i = 0; i < word.length; i++) {
-                htmlObjects.scrambled.innerHTML += `
-                <input class="word-list" id="word-char${i}" value="${gameObject.currentWord.scramble[i]}" disabled>`
-            }
-            break;
-        default:
-            description = "Unknown gamemode.";
-            break;
+    let word = gameObject.currentWord.normal;
+    htmlObjects.scrambled.innerHTML = '';
+    for (let i = 0; i < word.length; i++) {
+        htmlObjects.scrambled.innerHTML += `
+        <input class="word-list" id="word-char${i}" value="${gameObject.currentWord.scramble[i]}" disabled>`
     }
-    
-    await handleTime();
-
-    htmlObjects.description.innerHTML = description;
-    htmlObjects.gamemode.innerHTML = gameObject.types[gameObject.gamemode];
-    htmlObjects.challenge.innerHTML = challenge;
 }
 
 /**
@@ -126,6 +104,7 @@ async function adjustGameBox() {
  */
 async function insertInput() {
     let word = gameObject.currentWord.normal;
+    htmlObjects.inputBoxes.innerHTML = '';
 
     for (let i = 0; i < word.length; i++) {
         htmlObjects.inputBoxes.innerHTML += `
@@ -134,9 +113,19 @@ async function insertInput() {
             autocomplete="off" required>
         `;
     }
-    htmlObjects.inputBoxes.innerHTML += `<button type="submit">Check Answer</button> 
+    htmlObjects.inputBoxes.innerHTML += `<br><br><div id="game-buttons">
+    <button type="submit">Check Answer</button> 
+    <button onclick="reshuffle()" type="button">Reshuffle</button>
     <button onclick="sendHint()" type="button">Give me a hint</button>
-    <button type="button" onclick="giveUp()">Give Up</button>`;
+    <button type="button" onclick="giveUp()">Give Up</button>
+    </div>`;
+}
+
+function reshuffle() {
+    const mixedWord = scrambleWord(gameObject.currentWord.normal);
+    gameObject.currentWord.scramble = mixedWord;
+    
+    adjustGameBox()
 }
 
 /**
@@ -144,7 +133,7 @@ async function insertInput() {
  */
 function giveUp() {
     gameObject.score -= gameObject.currentWord.normal.length;
-    sendAlert(`The word was ${gameObject.currentWord.normal}. <br>It means: ${gameObject.currentWord.definition}<br>You lost ${gameObject.currentWord.normal.length} points.`, "You Gave Up :(");
+    sendAlert(`${gameObject.currentWord.definition}<br><br>You lost ${gameObject.currentWord.normal.length} points.`, gameObject.currentWord.normal);
     resetGame();
 }
 
@@ -159,20 +148,30 @@ function handleCorrectness(correct) {
 
         htmlObjects.modal.innerHTML = `
             <h2>${gameObject.currentWord.normal}</h2>
-            <p>This word means: ${gameObject.currentWord.definition}<p>
+            <p>${gameObject.currentWord.definition}<p>
             <p>You got it in <b>${gameObject.currentWord.attempts}</b> attempts</p>
             <p>It took you <b>${gameObject.time}</b> seconds</p>
-            <p>Your current score is: <code>${gameObject.score}</p>
+            <p>Your current score is: <b>${gameObject.score}<b></p>
             <button onclick="resetGame()">Play Again</button>
         `;
+
+        document.getElementById("notification").style.display = "none";
+        htmlObjects.modal.style.display = "block";
+        let elements = htmlObjects.inputBoxes.elements;
+        for (var i = 0, len = elements.length; i < len; ++i) {
+            elements[i].value = "";
+            elements[i].readOnly = true;
+            elements[i].disabled = true;
+        }
+
     } else {
         gameObject.currentWord.attempts = gameObject.currentWord.attempts + 1;
-
+        htmlObjects.inputBoxes.elements[0].focus();
     }
 }
 
 function sendHint() {
-    sendAlert(gameObject.currentWord.definition, `Definition Of Your Word`);
+    sendAlert(gameObject.currentWord.definition, `Definition of Your Word`);
 }
 
 function resetGame() {
@@ -180,7 +179,7 @@ function resetGame() {
     gameObject.currentWord = {};
     clearInterval(gameObject.interval)
     htmlObjects.inputBoxes.innerHTML = "";
-    htmlObjects.modal.innerHTML = "";
+    htmlObjects.modal.style.display = "none";
     htmlObjects.scrambled.innerHTML = "";
     main();
 }
@@ -213,6 +212,7 @@ async function main() {
     await retrieveWordList();
     await playScramble();
     await adjustGameBox();
+    await handleTime();
     await insertInput();
     gameObject.interval = setInterval(handleTime, 1000);
 }

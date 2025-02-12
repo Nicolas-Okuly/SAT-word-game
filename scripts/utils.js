@@ -44,8 +44,4 @@ function sendAlert(notification, title) {
     notif.addEventListener("click", () => {
         notif.style.display = "none";
     });
-
-    setTimeout(function () {
-        notif.style.display = "none";
-    }, 10000);
 }
