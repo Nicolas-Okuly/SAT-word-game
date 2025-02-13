@@ -20,8 +20,12 @@ const htmlObjects = {
     "inputBoxes": document.getElementById("inputBoxes"),
     "scrambled": document.getElementById("scrambled"),
     "modal": document.getElementById("modal"),
-    "gameBody": document.getElementsByClassName("game-body")[0]
+    "gameBody": document.getElementsByClassName("game-body")[0],
+    "score": document.getElementById("score"),
+    "leaderboard": document.getElementsByClassName("leaderboard")[0]
 }
+
+if(!navigator.onLine) htmlObjects.leaderboard.style.display = "none";
 
 /**
  * Scrambles a given word.
@@ -85,7 +89,7 @@ function formatWordsToJSON(data) {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
+        wordlist = await (await fetch("/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
         throw new Error(e)
@@ -117,12 +121,13 @@ function handleTime() {
         return "Timer Disabled";
     }
     gameObject.time += 1;
+    htmlObjects.score.innerHTML = gameObject.score
     
-    if (Math.floor(gameObject.time/30) != gameObject.timeItr) {
-        gameObject.timeItr += 1;
-        gameObject.score -= 1;
-        sendAlert("You recieved a one point deduction.", "Time Penalty");
-    } 
+    // if (Math.floor(gameObject.time/30) != gameObject.timeItr) {
+    //     gameObject.timeItr += 1;
+    //     gameObject.score -= 1;
+    //     sendAlert("You recieved a one point deduction.", "Time Penalty");
+    // } 
 
     htmlObjects.time.innerHTML = gameObject.time;
 }
@@ -180,8 +185,9 @@ function giveUp() {
 /**
  * 
  * @param {Boolean} correct Yes or no.
+ * @param {Number} firstWrong First wrong input
  */
-function handleCorrectness(correct) {
+function handleCorrectness(correct, firstWrong) {
     if(correct) {
         gameObject.score += gameObject.currentWord.normal.length - gameObject.currentWord.attempts;
         clearInterval(gameObject.interval);
@@ -193,6 +199,7 @@ function handleCorrectness(correct) {
             <p>It took you <b>${gameObject.time}</b> seconds</p>
             <p>Your current score is: <b>${gameObject.score}<b></p>
             <button onclick="resetGame()">Play Again</button>
+            <button onclick="finishGame()">Quit Playing</button>
         `;
 
         document.getElementById("notification").style.display = "none";
@@ -203,10 +210,9 @@ function handleCorrectness(correct) {
             elements[i].readOnly = true;
             elements[i].disabled = true;
         }
-
     } else {
         gameObject.currentWord.attempts = gameObject.currentWord.attempts + 1;
-        htmlObjects.inputBoxes.elements[0].focus();
+        htmlObjects.inputBoxes.elements[firstWrong].focus();
     }
 }
 
@@ -225,26 +231,38 @@ function resetGame() {
     main();
 }
 
-/**
- * Checks the answer
- */
-htmlObjects.inputBoxes.addEventListener("submit", async (e) => {
+async function checkAnswer(e) {
     e.preventDefault();
     let inputs = Array();
+    let correct = true;
+    let firstWrong = 0;
+
     for (let i = 0; i < gameObject.currentWord.scramble.length; i++) {
         inputs.push(e.target[`wordIn${i}`].value);
 
-        if(inputs[i].toLowerCase() !== gameObject.currentWord.normal[i]) {
-            for (let j = 0; j < gameObject.currentWord.normal.length; j++) {
-                e.target[`wordIn${j}`].value = "";
-            }
+        if(inputs[i].toLowerCase() != gameObject.currentWord.normal[i]) {
+            e.target[`wordIn${i}`].value = "";
             sendAlert("", "Incorrect Answer");
-            return handleCorrectness(false);
+
+            e.target[`wordIn${i}`].style.border = "1px solid red";
+            e.target[`wordIn${i}`].style['box-shadow'] = "0px 0px 10px red";
+
+            correct = false;
+            firstWrong = i;
+        } else {
+            if (correct !== false) correct = true;
+            e.target[`wordIn${i}`].style.border = "1px solid green";
+            e.target[`wordIn${i}`].style['box-shadow'] = "0px 0px 10px lightgreen";
         }
     }
 
-    handleCorrectness(true);
-});
+    handleCorrectness(correct, firstWrong);
+}
+
+/**
+ * Checks the answer
+ */
+htmlObjects.inputBoxes.addEventListener("submit", checkAnswer);
 
 /**
  * Main game function.

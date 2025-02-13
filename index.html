@@ -15,22 +15,35 @@
             <h1>SAT Word Game</h1>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem repellat quos eos doloribus molestias quis odio dolorum quaerat, itaque aliquid.</p>
         </header>
-
         <br>
-        
-        <div class="game-body">
-            <div id="notification">
-                <h3 id="notif-title"></h3>
-                <h4 id="notif-description"></h4>
+
+        <main id="container">
+            <div class="game-body">
+                <div id="notification">
+                    <h3 id="notif-title"></h3>
+                    <h4 id="notif-description"></h4>
+                </div>
+
+                <h2 id="timer">Time: <span id="time">0</span>s</h2>
+                <div id="game-element">
+                    <p id="description">Use the provided letters to unscramble the word.</p>
+                    <div id="scrambled"></div>
+                    <form id="inputBoxes"></form>
+                </div>
             </div>
 
-            <h2 id="timer">Time: <span id="time">0</span>s</h2>
-            <div id="game-element">
-                <p id="description">Use the provided letters to unscramble the word.</p>
-                <div id="scrambled"></div>
-                <form id="inputBoxes"></form>
+            <div class="leaderboard">
+                <h3>Leaderboard</h3>
+                <p>Current Score: <span id="score"></span></p>
+                <ol>
+                    <li>Person #1 - 9034</li>
+                    <li>Person #2 - 9043</li>
+                    <li>Person #3 - 843</li>
+                    <li>Person #4 - 432</li>
+                    <li>Person #5 - 4309</li>
+                </ol>
             </div>
-        </div>
+        </main>
 
         <div id="modal"></div>
     </body>
