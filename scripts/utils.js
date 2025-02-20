@@ -21,11 +21,14 @@ function moveNext(input, index) {
  */
 function handleBackspace(event, input, index) {
     let inputs = document.querySelectorAll('.word-input');
-  
+
     if (event.key === "Backspace" && input.value.length === 0 && index > 0) {
         inputs[index - 1].focus();
         inputs[index - 1].value = "";
     }
+
+    if (event.key === "ArrowLeft") inputs[index - 1].focus();
+    if (event.key === "ArrowRight") inputs[index + 1].focus();
 }
 
 /**

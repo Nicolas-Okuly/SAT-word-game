@@ -25,7 +25,20 @@ const htmlObjects = {
     "leaderboard": document.getElementsByClassName("leaderboard")[0]
 }
 
+const URL = "https://script.google.com/macros/s/AKfycbzb_gdTGUhmXLmA-ozjaTcIbYczKBnOY8LSDCKH0qYHy0Kv3UKUL8G8E2QIxMpAO_50/exec";
+const headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Access-Control-Allow-Origin': '*' };
+
 if(!navigator.onLine) htmlObjects.leaderboard.style.display = "none";
+
+async function handleLeaderboard() {
+    let res = await(await fetch(URL, headers)).text();
+    let data = JSON.parse(`[${res}]`);
+    for (let person of data) {
+        document.getElementById("leaderboard").innerHTML += `
+            <li>${person.name} - ${person.score}</li>
+        `
+    }
+}
 
 /**
  * Scrambles a given word.
@@ -50,6 +63,53 @@ async function failedToLoad() {
             <h1>Failed to load the word list. Please try again later or email me at <code>nicolasokuly@outlook.com</code></h1>
         </div>
     `;
+}
+
+async function pushToLeaderboard(name, score) {
+    const apiURL = "https://www.purgomalum.com/service/containsprofanity?text=";
+    let res = await (await fetch(apiURL + new URLSearchParams(name))).text();
+
+    if(res == "true") 
+        return sendAlert("Please use a name that does not contain foul language.", "Cannot Add Name");
+
+    if (isNaN(score))
+        return sendAlert("Please try again later.", "Something Went Wrong");
+
+    let body = {
+        "name": name,
+        "score": score
+    }
+
+    res = await fetch(URL, {
+        method: "POST",
+        headers: headers,
+        mode: 'no-cors',
+        body: new URLSearchParams(body).toString()
+    });
+
+    sendAlert("You were succussfully added to the leaderboard. If you beat any of the top 5 people, your name will appear here.", "Added to Leaderboard")
+}
+
+async function confirmLeaderboard() {
+    let name = document.getElementById("leadname").value;
+    if (!name || name == "")
+        return sendAlert("", "Name cannot be left blank");
+
+    document.getElementById("leadmodal").innerHTML = "<h2>Please wait...</h2>"
+
+    await pushToLeaderboard(name, gameObject.score);
+    document.getElementById("leadmodal").innerHTML = `
+        <label for="leadname"><h2>What is your name?</h2></label>
+        <input type="text" placeholder="John Doe" name="name" id="leadname" autocomplete="name" required>
+        <br><br>
+        <button onclick="confirmLeaderboard()" id="leadconfirm">Submit</button>
+        <button onclick="document.getElementById('leadmodal').style.display = 'none'">Cancel</button>
+    `;
+    document.getElementById("leadmodal").style.display = "none";
+}
+
+async function showLeaderboardModal() {
+    document.getElementById("leadmodal").style.display = "block"
 }
 
 function formatWordsToJSON(data) {
@@ -122,13 +182,6 @@ function handleTime() {
     }
     gameObject.time += 1;
     htmlObjects.score.innerHTML = gameObject.score
-    
-    // if (Math.floor(gameObject.time/30) != gameObject.timeItr) {
-    //     gameObject.timeItr += 1;
-    //     gameObject.score -= 1;
-    //     sendAlert("You recieved a one point deduction.", "Time Penalty");
-    // } 
-
     htmlObjects.time.innerHTML = gameObject.time;
 }
 
@@ -198,7 +251,7 @@ function handleCorrectness(correct, firstWrong) {
             <p>You got it in <b>${gameObject.currentWord.attempts}</b> attempts</p>
             <p>It took you <b>${gameObject.time}</b> seconds</p>
             <p>Your current score is: <b>${gameObject.score}<b></p>
-            <button onclick="resetGame()">Play Again</button>
+            <button id='playAgain' onclick="resetGame()">Play Again</button>
             <button onclick="finishGame()">Quit Playing</button>
         `;
 
@@ -210,6 +263,7 @@ function handleCorrectness(correct, firstWrong) {
             elements[i].readOnly = true;
             elements[i].disabled = true;
         }
+        document.getElementById('playAgain').focus();
     } else {
         gameObject.currentWord.attempts = gameObject.currentWord.attempts + 1;
         htmlObjects.inputBoxes.elements[firstWrong].focus();
@@ -276,4 +330,5 @@ async function main() {
     gameObject.interval = setInterval(handleTime, 1000);
 }
 
+handleLeaderboard();
 main();

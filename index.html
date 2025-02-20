@@ -35,16 +35,23 @@
             <div class="leaderboard">
                 <h3>Leaderboard</h3>
                 <p>Current Score: <span id="score"></span></p>
-                <ol>
-                    <li>Person #1 - 9034</li>
-                    <li>Person #2 - 9043</li>
-                    <li>Person #3 - 843</li>
-                    <li>Person #4 - 432</li>
-                    <li>Person #5 - 4309</li>
+                <ol id="leaderboard">
+                    
                 </ol>
+                <button onclick="showLeaderboardModal()">Submit Score to Leaderboard</button>
+                <br><br>
+                <a target="_blank" href="https://docs.google.com/spreadsheets/d/1F1qLNaVaq1vICHP7ZwJh4PY92PzEKR0YbNWjApgM9Fc/edit?usp=sharing"><i>View full leaderboard...</i></a>
             </div>
         </main>
 
         <div id="modal"></div>
+
+        <div id="leadmodal">
+            <label for="leadname"><h2>What is your name?</h2></label>
+            <input type="text" placeholder="John Doe" name="name" id="leadname" autocomplete="name" required>
+            <br><br>
+            <button onclick="confirmLeaderboard()" id="leadconfirm">Submit</button>
+            <button onclick="document.getElementById('leadmodal').style.display = 'none'">Cancel</button>
+        </div>
     </body>
 </html>
