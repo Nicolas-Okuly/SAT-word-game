@@ -65,6 +65,16 @@ async function failedToLoad() {
     `;
 }
 
+function updateWordlist() {
+    for (let letter of gameObject.wordlist) {
+        for (let word of letter[Object.keys(letter)[0]]) {
+            document.getElementById("wordlist").innerHTML += `
+                <li>${word["n"]}</li>
+            `
+        }
+    }
+}
+
 async function pushToLeaderboard(name, score) {
     const apiURL = "https://www.purgomalum.com/service/containsprofanity?text=";
     let res = await (await fetch(apiURL + new URLSearchParams(name))).text();
@@ -149,7 +159,7 @@ function formatWordsToJSON(data) {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/word_list.json")).json();
+        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
         throw new Error(e)
@@ -282,6 +292,7 @@ function resetGame() {
     htmlObjects.inputBoxes.innerHTML = "";
     htmlObjects.modal.style.display = "none";
     htmlObjects.scrambled.innerHTML = "";
+    document.getElementById("wordlist").innerHTML = "";
     main();
 }
 
@@ -327,6 +338,7 @@ async function main() {
     await adjustGameBox();
     await handleTime();
     await insertInput();
+    updateWordlist();
     gameObject.interval = setInterval(handleTime, 1000);
 }
 
