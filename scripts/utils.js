@@ -48,3 +48,5 @@ function sendAlert(notification, title) {
         notif.style.display = "none";
     });
 }
+
+document.getElementById("wordlist").style.maxHeight = "300px";

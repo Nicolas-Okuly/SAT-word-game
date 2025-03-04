@@ -9,22 +9,28 @@
 
         <script src="./scripts/script.js" defer></script>
         <script src="./scripts/utils.js" defer></script>
+        <audio src="./buzz.mp3" preload id="buzz"></audio>
     </head>
     <body>
         <header>
             <h1>SAT Word Game</h1>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem repellat quos eos doloribus molestias quis odio dolorum quaerat, itaque aliquid.</p>
+            <p>This is a word game to practice words that you could see on the SAT English portion of the test.</p>
         </header>
         <br>
 
         <main id="container">
+            <div class="wordlist">
+                <ol id="wordlist">
+                    
+                </ol>
+            </div>
+
             <div class="game-body">
                 <div id="notification">
                     <h3 id="notif-title"></h3>
                     <h4 id="notif-description"></h4>
                 </div>
 
-                <h2 id="timer">Time: <span id="time">0</span>s</h2>
                 <div id="game-element">
                     <p id="description">Use the provided letters to unscramble the word.</p>
                     <div id="scrambled"></div>
@@ -52,12 +58,6 @@
             <br><br>
             <button onclick="confirmLeaderboard()" id="leadconfirm">Submit</button>
             <button onclick="document.getElementById('leadmodal').style.display = 'none'">Cancel</button>
-        </div>
-
-        <div>
-            <ol id="wordlist">
-                
-            </ol>
         </div>
     </body>
 </html>

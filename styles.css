@@ -20,6 +20,15 @@ header {
   flex-direction: row;
   gap: 10px;
 }
+.wordlist {
+  overflow: auto;
+  padding: 15px;
+  background-color: #FFF;
+  border-radius: 12px;
+  min-width: 250px;
+  max-width: 250px;
+  word-wrap: break-word;
+}
 .leaderboard {
   padding: 15px;
   background-color: #FFF;
@@ -98,6 +107,10 @@ button {
 }
 #modal h2, #leadmodal h2 {
   text-transform: capitalize;
+}
+
+#wordlist {
+  user-select: none;
 }
 
 @media screen and (max-width: 875px) {

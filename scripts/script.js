@@ -1,8 +1,5 @@
 let gameObject = {
-    "timed": true, // Whether or not it is timed
     "score": 0, // Current score
-    "timeItr": 0,
-    "time": 0, // Time in seconds
     "wordlist": Array(), // List of words in the game
     "currentWord": {
         "normal": "", // Unscrambled version of the word
@@ -15,8 +12,6 @@ let gameObject = {
 // Fetch all HTML elements that we will use
 const htmlObjects = {
     "gamemode": document.getElementById("gamemode"),
-    "time": document.getElementById("time"),
-    "timer": document.getElementById("timer"),
     "inputBoxes": document.getElementById("inputBoxes"),
     "scrambled": document.getElementById("scrambled"),
     "modal": document.getElementById("modal"),
@@ -35,7 +30,7 @@ async function handleLeaderboard() {
     let data = JSON.parse(`[${res}]`);
     for (let person of data) {
         document.getElementById("leaderboard").innerHTML += `
-            <li>${person.name} - ${person.score}</li>
+            <li>${person.name}: ${person.score}</li>
         `
     }
 }
@@ -68,9 +63,13 @@ async function failedToLoad() {
 function updateWordlist() {
     for (let letter of gameObject.wordlist) {
         for (let word of letter[Object.keys(letter)[0]]) {
+            let obfusword = "";
+            for(let i = 0; i < word["n"].length; i++) {
+                obfusword += `<span>${word["n"][i]}</span>`
+            }
             document.getElementById("wordlist").innerHTML += `
-                <li>${word["n"]}</li>
-            `
+                <li>${obfusword}</li>
+            `;
         }
     }
 }
@@ -140,9 +139,8 @@ function formatWordsToJSON(data) {
         let word = set[0];
         let definition = set[1];
         let firstLetter = word.toLowerCase();
-        if (!result[firstLetter]) {
-            result[firstLetter] = []; 
-        }
+        if (!result[firstLetter])
+            result[firstLetter] = [];
         result[firstLetter].push({ n: word, d: definition }); 
     });
 
@@ -153,13 +151,18 @@ function formatWordsToJSON(data) {
     return finalJSON;
 }
 
+document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey && e.key === "f") e.preventDefault();
+});
+  
+
 /**
  * Function to load the word list.
  */
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("/SAT-word-game/word_list.json")).json();
+        wordlist = await (await fetch("https://github.com/Nicolas-Okuly/SAT-word-game/blob/master/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
         throw new Error(e)
@@ -181,19 +184,6 @@ async function playScramble() {
     gameObject.currentWord = { "normal": word["n"], "definition": word["d"], "scramble": mixedWord, "attempts": 0 };
 }
 
-/**
- * Handles game timing.
- * @returns {String} Only returns if the timer is off.
- */
-function handleTime() {
-    if(!gameObject.timed) {
-        htmlObjects.timer.style.display = "none";
-        return "Timer Disabled";
-    }
-    gameObject.time += 1;
-    htmlObjects.score.innerHTML = gameObject.score
-    htmlObjects.time.innerHTML = gameObject.time;
-}
 
 /**
  * Adjust the view.
@@ -252,15 +242,15 @@ function giveUp() {
  */
 function handleCorrectness(correct, firstWrong) {
     if(correct) {
-        gameObject.score += gameObject.currentWord.normal.length - gameObject.currentWord.attempts;
+        gameObject.score += gameObject.currentWord.normal.length;
         clearInterval(gameObject.interval);
 
         htmlObjects.modal.innerHTML = `
             <h2>${gameObject.currentWord.normal}</h2>
             <p>${gameObject.currentWord.definition}<p>
-            <p>You got it in <b>${gameObject.currentWord.attempts}</b> attempts</p>
-            <p>It took you <b>${gameObject.time}</b> seconds</p>
-            <p>Your current score is: <b>${gameObject.score}<b></p>
+            <p>You got it in <b>${gameObject.currentWord.attempts} attempts.</b></p>
+            <p>You gained <b>${gameObject.currentWord.normal.length} points.</b></p>
+            <p>Your current score is <b>${gameObject.score} points.</b></p>
             <button id='playAgain' onclick="resetGame()">Play Again</button>
             <button onclick="finishGame()">Quit Playing</button>
         `;
@@ -275,7 +265,7 @@ function handleCorrectness(correct, firstWrong) {
         }
         document.getElementById('playAgain').focus();
     } else {
-        gameObject.currentWord.attempts = gameObject.currentWord.attempts + 1;
+        gameObject.currentWord.attempts++;
         htmlObjects.inputBoxes.elements[firstWrong].focus();
     }
 }
@@ -285,9 +275,7 @@ function sendHint() {
 }
 
 function resetGame() {
-    gameObject.time = 0;
     gameObject.currentWord = {};
-    gameObject.timeItr = 0;
     clearInterval(gameObject.interval)
     htmlObjects.inputBoxes.innerHTML = "";
     htmlObjects.modal.style.display = "none";
@@ -301,13 +289,14 @@ async function checkAnswer(e) {
     let inputs = Array();
     let correct = true;
     let firstWrong = 0;
+    let wrongCount = 0;
 
     for (let i = 0; i < gameObject.currentWord.scramble.length; i++) {
         inputs.push(e.target[`wordIn${i}`].value);
 
         if(inputs[i].toLowerCase() != gameObject.currentWord.normal[i]) {
             e.target[`wordIn${i}`].value = "";
-            sendAlert("", "Incorrect Answer");
+            wrongCount++;
 
             e.target[`wordIn${i}`].style.border = "1px solid red";
             e.target[`wordIn${i}`].style['box-shadow'] = "0px 0px 10px red";
@@ -320,7 +309,11 @@ async function checkAnswer(e) {
             e.target[`wordIn${i}`].style['box-shadow'] = "0px 0px 10px lightgreen";
         }
     }
-
+    if(wrongCount > 0) {
+        sendAlert(`You lost ${wrongCount} points.`, "Incorrect Answer");
+        document.getElementById("buzz").play();
+    }
+    gameObject.score -= wrongCount;
     handleCorrectness(correct, firstWrong);
 }
 
@@ -336,10 +329,8 @@ async function main() {
     await retrieveWordList();
     await playScramble();
     await adjustGameBox();
-    await handleTime();
     await insertInput();
     updateWordlist();
-    gameObject.interval = setInterval(handleTime, 1000);
 }
 
 handleLeaderboard();
