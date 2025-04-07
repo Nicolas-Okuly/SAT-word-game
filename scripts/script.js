@@ -162,7 +162,7 @@ document.addEventListener("keydown", function (e) {
 async function retrieveWordList() {
     let wordlist;
     try {
-        wordlist = await (await fetch("https://github.com/Nicolas-Okuly/SAT-word-game/blob/master/word_list.json")).json();
+        wordlist = await (await fetch("/word_list.json")).json();
     } catch (e) {
         await failedToLoad();
         throw new Error(e)
